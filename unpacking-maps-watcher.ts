@@ -1,8 +1,7 @@
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import chokidar from 'chokidar';
-import { writeFile, unlink } from 'node:fs/promises';
-import { createReadStream } from 'node:fs';
+import { createReadStream, writeFileSync, unlinkSync } from 'node:fs';
 import { createInterface } from 'node:readline';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -34,7 +33,7 @@ const formatMapKeys = (data: string, filename: string) => {
       cellsData: file.mapData.cellsData,
       localizedSounds: file.mapData.localizedSounds,
    };
-   writeFile(join(outputDir, mapId + '.json'), JSON.stringify(mapData, null, 3));
+   writeFileSync(join(outputDir, mapId + '.json'), JSON.stringify(mapData, null, 3));
    console.log(`Updated ${filename}`);
 };
 
@@ -42,11 +41,11 @@ const readJSONFile = async (file: string) => {
    const filename = file.split(/\\|\//g).pop();
    if (!filename || filename.startsWith('.')) return;
 
-   try {
-      const fileStream = createReadStream(file, { encoding: 'utf-8' });
-      const rl = createInterface({ input: fileStream, crlfDelay: Infinity });
+   let data = '';
+   const fileStream = createReadStream(file, { encoding: 'utf-8' });
+   const rl = createInterface({ input: fileStream, crlfDelay: Infinity });
 
-      let data = '';
+   try {
       for await (const line of rl) {
          if (line.includes('"references": {')) {
             data = data.trimEnd().slice(0, -1) + '}';
@@ -54,10 +53,14 @@ const readJSONFile = async (file: string) => {
          }
          data += line;
       }
+
       formatMapKeys(data, filename);
-      unlink(file).catch(err => console.error(`Error deleting ${filename}`, err));
+      unlinkSync(file);
    } catch (err) {
       console.error(`Error processing ${filename}`, err);
+   } finally {
+      rl.close();
+      fileStream.destroy();
    }
 };
 
