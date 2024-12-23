@@ -1,18 +1,19 @@
 node_modules
 
-diff/new/*
-!diff/new/.gitkeep
-diff/old/*
-!diff/old/.gitkeep
+data_input/*
+!data_input/.gitkeep
 
-input/data/*
-!input/data/.gitkeep
-input/languages/*
-!input/languages/.gitkeep
-input/images/*
-!input/images/.gitkeep
+data_output/*
+!data_output/.gitkeep
 
-output/data/*
-!output/data/.gitkeep
-output/images/*
-!output/images/.gitkeep
+languages/*
+!languages/.gitkeep
+
+map_data/*
+!map_data/.gitkeep
+
+map_elements/*
+!map_elements/.gitkeep
+
+map_renders/*
+!map_renders/.gitkeep
