@@ -7,8 +7,8 @@ import { createInterface } from 'node:readline';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const inputDir = join(__dirname, 'data_input');
-const outputDir = join(__dirname, 'data_output');
+const inputDir = join(__dirname, 'map_bundles');
+const outputDir = join(__dirname, 'map_data');
 
 const formatMapKeys = (data: string, filename: string) => {
    const file = JSON.parse(data);

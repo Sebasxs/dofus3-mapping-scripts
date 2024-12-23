@@ -9,6 +9,9 @@ data_output/*
 languages/*
 !languages/.gitkeep
 
+map_bundles/*
+!map_bundles/.gitkeep
+
 map_data/*
 !map_data/.gitkeep
 
