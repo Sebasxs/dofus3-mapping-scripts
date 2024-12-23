@@ -5,6 +5,7 @@
    "description": "",
    "main": "index.js",
    "scripts": {
+      "build-maps": "tsx build-maps.ts",
       "watch-maps": "tsx unpacking-maps-watcher.ts",
       "test": "echo \"Error: no test specified\" && exit 1"
    },
@@ -26,6 +27,7 @@
       "typescript-eslint": "^8.18.0"
    },
    "dependencies": {
+      "canvas": "^2.11.2",
       "chokidar": "^4.0.1"
    }
 }

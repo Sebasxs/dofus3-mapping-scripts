@@ -8,10 +8,10 @@ import { createInterface } from 'node:readline';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const inputDir = join(__dirname, 'input', 'maps');
-const outputDir = join(__dirname, 'output', 'maps');
+const inputDir = join(__dirname, 'data_input');
+const outputDir = join(__dirname, 'data_output');
 
-const filterMapKeys = (data: string, filename: string) => {
+const formatMapKeys = (data: string, filename: string) => {
    const file = JSON.parse(data);
    const mapId = filename?.replace(/\D/g, '');
    const mapData = {
@@ -20,16 +20,17 @@ const filterMapKeys = (data: string, filename: string) => {
       bottomNeighbourId: file.mapData.bottomNeighbourId,
       leftNeighbourId: file.mapData.leftNeighbourId,
       rightNeighbourId: file.mapData.rightNeighbourId,
+      backgroundColor: file.mapData.backgroundColor.value,
       backgroundElements: file.mapData.backgroundElements,
       foregroundElements: file.mapData.foregroundElements,
-      sorteableElements: file.mapData.sorteableElements,
+      sortableElements: file.mapData.sortableElements,
       animatedElements: file.mapData.animatedElements,
       refractionElements: file.mapData.refractionElements,
       interactiveElements: file.mapData.interactiveElements,
       boundingBoxes: file.mapData.boundingBoxes,
       backgroundMaterialData: file.mapData.backgroundMaterialData,
       foregroundMaterialData: file.mapData.foregroundMaterialData,
-      sorteableMaterialData: file.mapData.sorteableMaterialData,
+      sortableMaterialData: file.mapData.sortableMaterialData,
       cellsData: file.mapData.cellsData,
       localizedSounds: file.mapData.localizedSounds,
    };
@@ -39,7 +40,7 @@ const filterMapKeys = (data: string, filename: string) => {
 
 const readJSONFile = async (file: string) => {
    const filename = file.split(/\\|\//g).pop();
-   if (!filename) return;
+   if (!filename || filename.startsWith('.')) return;
 
    try {
       const fileStream = createReadStream(file, { encoding: 'utf-8' });
@@ -47,14 +48,13 @@ const readJSONFile = async (file: string) => {
 
       let data = '';
       for await (const line of rl) {
-         console.log(line);
          if (line.includes('"references": {')) {
             data = data.trimEnd().slice(0, -1) + '}';
             break;
          }
          data += line;
       }
-      filterMapKeys(data, filename);
+      formatMapKeys(data, filename);
       unlink(file).catch(err => console.error(`Error deleting ${filename}`, err));
    } catch (err) {
       console.error(`Error processing ${filename}`, err);
