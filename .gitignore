@@ -1,5 +1,14 @@
 node_modules
 
+audio/*
+!audio/.gitkeep
+
+fonts/*
+!fonts/.gitkeep
+
+images/*
+!images/.gitkeep
+
 data_input/*
 !data_input/.gitkeep
 
