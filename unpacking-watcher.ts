@@ -1,7 +1,7 @@
 import { fileURLToPath } from 'url';
 import { dirname, join, basename } from 'path';
 import chokidar from 'chokidar';
-import { createReadStream, writeFileSync, unlinkSync } from 'node:fs';
+import { createReadStream, writeFileSync, unlinkSync, existsSync } from 'node:fs';
 import { createInterface } from 'node:readline';
 import { setTimeout as sleep } from 'timers/promises';
 
@@ -23,7 +23,8 @@ const addFileToDeleteQueue = async (path: string) => {
 
    while (filesToDelete.length > 0) {
       const file = filesToDelete.shift();
-      if (!file) continue;
+      const fileExists = file && existsSync(file);
+      if (!fileExists) continue;
       try {
          unlinkSync(file);
       } catch (err) {
